@@ -1,0 +1,69 @@
+// Remove the `url` from datasource - it's now in prisma.config.ts
+datasource db {
+  provider = "postgresql"
+  // url is configured in prisma.config.ts
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  name          String
+  role          String    @default("user")
+  passwordHash  String    @map("password_hash")
+  isActive      Boolean   @default(true) @map("is_active")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  lastLogin     DateTime? @map("last_login")
+  
+  // Relations
+  queries       Query[]
+  
+  @@map("users")
+}
+
+model Query {
+  id              String    @id @default(uuid())
+  userId          String?   @map("user_id")
+  queryText       String    @map("query")
+  specialty       String?
+  userType        String    @default("user") @map("user_type")
+  context         String?
+  source          String    @default("api")
+  sessionId       String?   @map("session_id")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  
+  // AI fields (for future RAG integration)
+  aiAnswer        String?   @map("ai_answer")
+  aiSources       String?   @map("ai_sources") // Store as JSON string
+  confidenceScore Float?    @map("confidence_score")
+  needsReview     Boolean   @default(false) @map("needs_review")
+  reviewedBy      String?   @map("reviewed_by")
+  reviewedAt      DateTime? @map("reviewed_at")
+  reviewNotes     String?   @map("review_notes")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  
+  // Relations
+  user            User?     @relation(fields: [userId], references: [id])
+  feedbacks       Feedback[]
+  
+  @@map("medical_queries")
+}
+
+model Feedback {
+  id        String   @id @default(uuid())
+  queryId   String   @map("query_id")
+  userId    String?  @map("user_id")
+  rating    Int
+  feedback  String?
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  // Relations
+  query     Query    @relation(fields: [queryId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
+  
+  @@map("query_feedback")
+}
