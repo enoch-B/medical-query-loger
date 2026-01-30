@@ -3,6 +3,7 @@ import prisma from "../config/database.js";
 export const createQuery = async (req, res, next) => {
     try {
         const { text } = req.body;
+        console.log("Request Body:", req.body);
 
         if (!text || text.trim() === "") {
             return res.status(400).json({
@@ -15,7 +16,7 @@ export const createQuery = async (req, res, next) => {
         });
 
         res.status(201).json({
-            message: "Medical query logged successfully",
+            message: "Medical query logged successfully!",
             data: saved,
         });
     } catch (err) {
@@ -34,6 +35,8 @@ export const getAllQueries = async (req, res, next) => {
             data: queries,
         });
     } catch (err) {
-        next(err);
+        res.status(500).json({
+            error: "Failed to fetch queries",
+        });
     }
 };
