@@ -1,5 +1,6 @@
 import express from "express"
 import queriesRoute from "./routes/queriesRoute.js";
+import userRoutes from "./routes/userRoutes.js";
 
 const app = express()
 
@@ -10,6 +11,7 @@ app.get("/health", (req, res) => {
 });
 
 app.use("/api/query", queriesRoute);
+app.use("/api/user", userRoutes);
 
 //Endpoint logger
 app.use((req, res, next) => {
