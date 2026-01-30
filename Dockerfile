@@ -6,10 +6,11 @@ COPY package*.json ./
 COPY prisma.config.ts ./
 COPY prisma ./prisma
 RUN npm install
+RUN DATABASE_URL="postgresql://postgres:postgres@postgres:5432/medical_queries" npx prisma generate
 
 
 
-COPY . .
+# COPY . .
 
 EXPOSE 3000
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
