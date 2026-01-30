@@ -9,7 +9,6 @@ if (!PORT) {
     console.warn("The Port from .env is not Used")
 }
 
-app.use("/query", queriesRoute);
 
 app.listen(
     PORT, () => {
