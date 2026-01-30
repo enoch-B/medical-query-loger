@@ -9,7 +9,7 @@ app.get("/health", (req, res) => {
     res.json({ status: "ok", service: "Media Query logger" });
 });
 
-app.use("/api", queriesRoute);
+app.use("/api/query", queriesRoute);
 
 //Endpoint logger
 app.use((req, res, next) => {
