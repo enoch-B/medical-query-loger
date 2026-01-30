@@ -3,6 +3,7 @@ import prisma from "../config/database.js";
 export const createQuery = async (req, res, next) => {
     try {
         const { text } = req.body;
+        const userId = req.account.id;
         console.log("Request Body:", req.body);
 
         if (!text || text.trim() === "") {
@@ -12,7 +13,7 @@ export const createQuery = async (req, res, next) => {
         }
 
         const saved = await prisma.query.create({
-            data: { text },
+            data: { text, userId },
         });
 
         res.status(201).json({
@@ -26,7 +27,9 @@ export const createQuery = async (req, res, next) => {
 
 export const getAllQueries = async (req, res, next) => {
     try {
+        const userId = req.account.id;
         const queries = await prisma.query.findMany({
+            where: { userId },
             orderBy: { createdAt: "desc" },
         });
 
