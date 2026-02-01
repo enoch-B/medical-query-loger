@@ -43,3 +43,23 @@ export const getAllQueries = async (req, res, next) => {
         });
     }
 };
+
+export const uploadFile = async (req, res, next) => {
+    try {
+        const file = req.file;
+        const userId = req.account.id;
+        const saved = await prisma.file.create({
+            data: {
+                userId,
+                filename: file.filename,
+                path: file.path,
+            },
+        });
+        res.status(201).json({
+            message: "File uploaded successfully",
+            data: saved,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
