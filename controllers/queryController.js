@@ -63,3 +63,11 @@ export const uploadFile = async (req, res, next) => {
         next(err);
     }
 };
+
+export const getFile= async (req, res)=>{
+    try{
+      
+    }catch(err){
+        
+    }
+}
